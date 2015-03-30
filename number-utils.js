@@ -1,9 +1,12 @@
+'use strict';
+
 /**
  * A small handful of number utilities I've been using in my work
  */
-numberUtils = {
+var numberUtils = {
   // currency formatter taken from http://www.josscrowcroft.com/2011/code/format-unformat-money-currency-javascript/
   // default args: 0, 2, "$", ",", "."
+  // TODO: permit reformatting currency strings by running thru unformatMoney 1st?
   formatMoney: function(number, decimal_places, currency_symbol, thousands_seperator, decimal_seperator) {
     number = number || 0;
     decimal_places = !isNaN(decimal_places = Math.abs(decimal_places)) ? decimal_places : 2;
@@ -13,7 +16,7 @@ numberUtils = {
 
     var negative = number < 0 ? '-' : '';
     var i = parseInt(number = Math.abs(+number || 0).toFixed(decimal_places), 10) + '';
-    var j = (j = i.length) > 3 ? j % 3 : 0;
+    var j = i.length > 3 ? i.length % 3 : 0;
 
     return currency_symbol + negative
       + (j ? i.substr(0, j) + thousands_seperator : '')
@@ -26,7 +29,7 @@ numberUtils = {
   // Remove non-numeric chars from a string (except decimal point & minus sign)
   // and return a numeric value. Any falsey argument returns zero. Anything that
   // makes parseFloat return NaN after the character replacement also returns 0.
-  unformatNumber: function(value) {
+  unformatMoney: function(value) {
     var unformatted;
 
     value = value || 0;
