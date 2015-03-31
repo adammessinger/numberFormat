@@ -17,27 +17,43 @@ if (!String.prototype.trim) {
 }
 
 var numberFormat = {
-  // currency formatter taken from http://www.josscrowcroft.com/2011/code/format-unformat-money-currency-javascript/
-  // default args: 0, 2, "$", ",", "."
-  formatMoney: function(number, decimal_places, currency_symbol, thousands_separator, decimal_separator) {
+  // formatMoney is based on Joss Crowcroft's currency formatter:
+  // http://www.josscrowcroft.com/2011/code/format-unformat-money-currency-javascript/
+  // 'number' defaults to 0
+  // default options: {
+  //   decimal_places: 2,
+  //   currency_symbol: '$',
+  //   thousands_separator: ',',
+  //   decimal_separator: '.'
+  // }
+  formatMoney: function(number, options) {
+    var opts;
     number = number || 0;
-    decimal_places = !isNaN(decimal_places = Math.abs(decimal_places)) ? decimal_places : 2;
-    currency_symbol = currency_symbol !== undefined ? currency_symbol : '$';
-    thousands_separator = thousands_separator || ',';
-    decimal_separator = decimal_separator || '.';
+    options = options || {};
+    opts = {
+      decimal_places: !isNaN(options.decimal_places = Math.abs(options.decimal_places))
+        ? options.decimal_places
+        : 2,
+      currency_symbol: options.currency_symbol !== undefined
+        ? options.currency_symbol
+        : '$',
+      thousands_separator: options.thousands_separator || ',',
+      decimal_separator: options.decimal_separator || '.'
+    };
 
     var negative = number < 0 ? '-' : '';
-    var integer_str = parseInt(number = Math.abs(+number || 0).toFixed(decimal_places), 10) + '';
+    var integer_str = parseInt(number = Math.abs(+number || 0).toFixed(opts.decimal_places), 10) + '';
     var thou_sep_no1 = integer_str.length > 3 ? integer_str.length % 3 : 0;
 
-    return negative + currency_symbol
-      + (thou_sep_no1 ? integer_str.substr(0, thou_sep_no1) + thousands_separator : '')
-      + integer_str.substr(thou_sep_no1).replace(/(\d{3})(?=\d)/g, '$1' + thousands_separator)
-      + (decimal_places
-        ? decimal_separator + Math.abs(number - integer_str).toFixed(decimal_places).slice(2)
+    return negative + opts.currency_symbol
+      + (thou_sep_no1 ? integer_str.substr(0, thou_sep_no1) + opts.thousands_separator : '')
+      + integer_str.substr(thou_sep_no1).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousands_separator)
+      + (opts.decimal_places
+        ? opts.decimal_separator + Math.abs(number - integer_str).toFixed(opts.decimal_places).slice(2)
         : "");
   },
 
+  // unformatMoney
   // Remove non-numeric chars from a string (except decimal point & leading minus)
   // and return a numeric value. Only a leading minus sign (or hyphen-minus
   // character) is interpreted as indicating the number is negative. Any falsey
@@ -90,6 +106,7 @@ var numberFormat = {
     return isNaN(unformatted) ? 0 : unformatted;
   },
 
+  // padZeros
   // take a number, return a string that's front-padded with zeroes to the specified length
   padZeros: function(num, length) {
     var padded_str = '' + num;
