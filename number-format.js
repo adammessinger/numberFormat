@@ -27,14 +27,14 @@ var numberFormat = {
     decimal_separator = decimal_separator || '.';
 
     var negative = number < 0 ? '-' : '';
-    var i = parseInt(number = Math.abs(+number || 0).toFixed(decimal_places), 10) + '';
-    var j = i.length > 3 ? i.length % 3 : 0;
+    var integer_str = parseInt(number = Math.abs(+number || 0).toFixed(decimal_places), 10) + '';
+    var thou_sep_no1 = integer_str.length > 3 ? integer_str.length % 3 : 0;
 
     return negative + currency_symbol
-      + (j ? i.substr(0, j) + thousands_separator : '')
-      + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thousands_separator)
+      + (thou_sep_no1 ? integer_str.substr(0, thou_sep_no1) + thousands_separator : '')
+      + integer_str.substr(thou_sep_no1).replace(/(\d{3})(?=\d)/g, '$1' + thousands_separator)
       + (decimal_places
-        ? decimal_separator + Math.abs(number - i).toFixed(decimal_places).slice(2)
+        ? decimal_separator + Math.abs(number - integer_str).toFixed(decimal_places).slice(2)
         : "");
   },
 
