@@ -55,11 +55,19 @@
         expect(numberFormat.unformatMoney('1')).to.be.a('number');
       });
 
+      it('should only use leading "-" to determine negativity', function() {
+        expect(numberFormat.unformatMoney('-1'), 'leading "-"').to.equal(-1);
+        expect(numberFormat.unformatMoney('1-'), 'trailing "-"').to.equal(1);
+        expect(numberFormat.unformatMoney('10-1'), 'inner "-"').to.equal(100);
+      });
+
       it('should return the numeric representation of a string', function() {
         expect(numberFormat.unformatMoney('1')).to.equal(1);
         expect(numberFormat.unformatMoney('100 goats')).to.equal(100);
         expect(numberFormat.unformatMoney('1,000,000')).to.equal(1000000);
+        expect(numberFormat.unformatMoney('-1,000.985')).to.equal(-1000.985);
         expect(numberFormat.unformatMoney('$1,000,000.00')).to.equal(1000000);
+        expect(numberFormat.unformatMoney('-$2,000.15: OVERDRAWN')).to.equal(-2000.15);
       });
 
       it('should remove any passed currency_symbol option before processing', function() {
