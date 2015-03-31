@@ -41,7 +41,7 @@
       });
 
       it('should proccess alternate currency formats', function() {
-        var costa_rico = numberFormat.formatMoney(1000000, {
+        var costa_rica = numberFormat.formatMoney(1000000, {
           currency_symbol: '₡',
           thousands_separator: '.',
           decimal_separator: ','
@@ -56,7 +56,7 @@
           thousands_separator: "'"
         });
 
-        expect(costa_rico).to.equal('₡1.000.000,00');
+        expect(costa_rica).to.equal('₡1.000.000,00');
         expect(ukraine).to.equal('₴1 000 000,00');
         expect(switzerland).to.equal("Fr. 1'000'000.00");
       });
