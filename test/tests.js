@@ -8,7 +8,7 @@
       });
 
       it('should default to 2 decimal places', function() {
-        expect(numberFormat.formatMoney(1.123).substr(3)).to.have.length(2);
+        expect(numberFormat.formatMoney(1.123).substr(3).length).to.equal(2);
       });
 
       it('should round result if 0 passed for decimal_places', function() {
@@ -37,6 +37,7 @@
         expect(formatted[2]).to.equal(',');
         expect(formatted[6]).to.equal(',');
         expect(formatted[10]).to.equal(',');
+        expect(formatted.match(/,/g).length).to.equal(3);
       });
 
       it('should proccess alternate currency formats', function() {
