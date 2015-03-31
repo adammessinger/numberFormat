@@ -4,7 +4,7 @@
  * A small handful of number formatting utilities I've been using in my work
  */
 
-// String.prototype.trim polyfill for numberFormat.unformatMoney
+// String.prototype.trim polyfill for numberFormat.unformatMoney in IE < 9
 if (!String.prototype.trim) {
   (function() {
     // Make sure we trim BOM and NBSP
