@@ -11,9 +11,9 @@
         expect(numberFormat.formatMoney(1.123).substr(3).length).to.equal(2);
       });
 
-      it('should round result if 0 passed for decimal_places', function() {
-        var rounded_up = numberFormat.formatMoney(1.5, 0);
-        var rounded_down = numberFormat.formatMoney(1.49, 0);
+      it('should round result if 0 passed for decimal_places option', function() {
+        var rounded_up = numberFormat.formatMoney(1.5, { decimal_places: 0 });
+        var rounded_down = numberFormat.formatMoney(1.49, { decimal_places: 0 });
 
         expect(rounded_up).to.equal('$2');
         expect(rounded_down).to.equal('$1');
@@ -41,9 +41,20 @@
       });
 
       it('should proccess alternate currency formats', function() {
-        var costa_rico = numberFormat.formatMoney(1000000, undefined, '₡', '.', ',');
-        var ukraine = numberFormat.formatMoney(1000000, undefined, '₴', ' ', ',');
-        var switzerland = numberFormat.formatMoney(1000000, undefined, 'Fr. ', "'", '.');
+        var costa_rico = numberFormat.formatMoney(1000000, {
+          currency_symbol: '₡',
+          thousands_separator: '.',
+          decimal_separator: ','
+        });
+        var ukraine = numberFormat.formatMoney(1000000, {
+          currency_symbol: '₴',
+          thousands_separator: ' ',
+          decimal_separator: ','
+        });
+        var switzerland = numberFormat.formatMoney(1000000, {
+          currency_symbol: 'Fr. ',
+          thousands_separator: "'"
+        });
 
         expect(costa_rico).to.equal('₡1.000.000,00');
         expect(ukraine).to.equal('₴1 000 000,00');
