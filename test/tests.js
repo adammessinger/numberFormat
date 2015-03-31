@@ -3,38 +3,36 @@
 
   describe('numberFormat', function() {
     describe('formatMoney', function() {
-      var testee = numberFormat.formatMoney;
-
       it('should return a string', function() {
-        expect(testee(1)).to.be.a('string');
+        expect(numberFormat.formatMoney(1)).to.be.a('string');
       });
 
       it('should default to 2 decimal places', function() {
-        expect(testee(1.123).substr(3)).to.have.length(2);
+        expect(numberFormat.formatMoney(1.123).substr(3)).to.have.length(2);
       });
 
       it('should round result if 0 passed for decimal_places', function() {
-        var rounded_up = testee(1.5, 0);
-        var rounded_down = testee(1.49, 0);
+        var rounded_up = numberFormat.formatMoney(1.5, 0);
+        var rounded_down = numberFormat.formatMoney(1.49, 0);
 
         expect(rounded_up).to.equal('$2');
         expect(rounded_down).to.equal('$1');
       });
 
       it('should default to "$" currency symbol', function() {
-        expect(testee(1)[0]).to.equal('$');
+        expect(numberFormat.formatMoney(1)[0]).to.equal('$');
       });
 
       it('should default to "," thousands separator', function() {
-        expect(testee(1000)[2]).to.equal(',');
+        expect(numberFormat.formatMoney(1000)[2]).to.equal(',');
       });
 
       it('should default to "." decimal separator', function() {
-        expect(testee(1)[2]).to.equal('.');
+        expect(numberFormat.formatMoney(1)[2]).to.equal('.');
       });
 
       it('should group numbers by thousands', function() {
-        var formatted = testee(1000000000);
+        var formatted = numberFormat.formatMoney(1000000000);
 
         expect(formatted[2]).to.equal(',');
         expect(formatted[6]).to.equal(',');
@@ -42,51 +40,50 @@
       });
 
       it('should proccess alternate currency formats', function() {
-        var Costa_Rico = testee(1000000, 2, '₡', '.', ',');
-        var Ukraine = testee(1000000, 2, '₴', ' ', ',');
-        var Switzerland = testee(1000000, 2, 'Fr. ', "'", '.');
+        var costa_rico = numberFormat.formatMoney(1000000, 2, '₡', '.', ',');
+        var ukraine = numberFormat.formatMoney(1000000, 2, '₴', ' ', ',');
+        var switzerland = numberFormat.formatMoney(1000000, 2, 'Fr. ', "'", '.');
 
-        expect(Costa_Rico).to.equal('₡1.000.000,00');
-        expect(Ukraine).to.equal('₴1 000 000,00');
-        expect(Switzerland).to.equal("Fr. 1'000'000.00");
+        expect(costa_rico).to.equal('₡1.000.000,00');
+        expect(ukraine).to.equal('₴1 000 000,00');
+        expect(switzerland).to.equal("Fr. 1'000'000.00");
       });
     });
 
     describe('unformatMoney', function() {
-      var testee = numberFormat.unformatMoney;
-
       it('should return a number', function() {
-        expect(testee('1')).to.be.a('number');
+        expect(numberFormat.unformatMoney('1')).to.be.a('number');
       });
 
       it('should return the numeric representation of a string', function() {
-        expect(testee('1')).to.equal(1);
-        expect(testee('100 goats')).to.equal(100);
-        expect(testee('1,000,000')).to.equal(1000000);
-        expect(testee('$1,000,000.00')).to.equal(1000000);
+        expect(numberFormat.unformatMoney('1')).to.equal(1);
+        expect(numberFormat.unformatMoney('100 goats')).to.equal(100);
+        expect(numberFormat.unformatMoney('1,000,000')).to.equal(1000000);
+        expect(numberFormat.unformatMoney('$1,000,000.00')).to.equal(1000000);
       });
 
       it('should remove any passed currency_symbol before processing', function() {
-        expect(testee("Fr. 1'000'000.00", 'Fr. ')).to.equal(1000000);
+        expect(numberFormat.unformatMoney("Fr. 1'000'000.00", 'Fr. ')).to.equal(1000000);
       });
 
       it('should respect alternate thousands_separator arg when passed', function() {
-        expect(testee('₡1.000.000', null, '.')).to.equal(1000000);
+        expect(numberFormat.unformatMoney('₡1.000.000', null, '.')).to.equal(1000000);
       });
 
       it('should respect alternate decimal_separator arg when passed', function() {
-        expect(testee('₴1 000 000,99', null, null, ',')).to.equal(1000000.99);
+        expect(numberFormat.unformatMoney('₴1 000 000,99', null, null, ',')).to.equal(1000000.99);
       });
 
       it('should remove non-numeric characters except decimal and leading minus', function() {
-        var just_non_numbers = testee('1!2@3#4$5%6a7`89₴01');
-        var nonnum_and_decimal = testee('1!2@3#4$5%6a7`.89₴01');
-        var nonnum_and_leading_minus = testee('-1!2@3#4$5%6a7`89₴01');
-        var nonnum_and_decimal_and_leading_minus = testee('-1!2@3#4$5%6a7`.89₴01');
-        var nonnum_and_internal_minus = testee('1!2@3#4$5%6a7`8-9₴01');
-        var nonnum_and_decimal_and_internal_minus = testee('1!2@3#4$5%6a7`.8-9₴01');
-        var nonnum_and_leading_and_internal_minus = testee('-1!2@3#4$5%6a7`8-9₴01');
-        var nonnum_and_decimal_and_leading_and_internal_minus = testee('-1!2@3#4$5%6a7`.8-9₴01');
+        var unformat = numberFormat.unformatMoney;
+        var just_non_numbers = unformat('1!2@3#4$5%6a7`89₴01');
+        var nonnum_and_decimal = unformat('1!2@3#4$5%6a7`.89₴01');
+        var nonnum_and_leading_minus = unformat('-1!2@3#4$5%6a7`89₴01');
+        var nonnum_and_decimal_and_leading_minus = unformat('-1!2@3#4$5%6a7`.89₴01');
+        var nonnum_and_internal_minus = unformat('1!2@3#4$5%6a7`8-9₴01');
+        var nonnum_and_decimal_and_internal_minus = unformat('1!2@3#4$5%6a7`.8-9₴01');
+        var nonnum_and_leading_and_internal_minus = unformat('-1!2@3#4$5%6a7`8-9₴01');
+        var nonnum_and_decimal_and_leading_and_internal_minus = unformat('-1!2@3#4$5%6a7`.8-9₴01');
 
         expect(just_non_numbers, 'string includes non-numbers')
           .to.equal(12345678901);
