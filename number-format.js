@@ -1,7 +1,8 @@
 'use strict';
 
 /**
- * A small handful of number formatting utilities I've been using in my work
+ * A small handful of number formatting utilities I've been using in my work.
+ * Distributed under the MIT license -- see LICENSE.txt
  */
 
 // String.prototype.trim polyfill for numberFormat.unformatMoney in IE < 9
