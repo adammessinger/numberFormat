@@ -43,10 +43,15 @@ var numberFormat = {
   // character) is interpreted as indicating the number is negative. Any falsey
   // argument returns zero. Anything that makes parseFloat return NaN after the
   // character replacement also returns 0.
-  unformatMoney: function(value) {
-    var unformatted, is_negative;
-
+  // default options: {
+  //   currency_symbol: '$',
+  //   thousands_separator: ',',
+  //   decimal_separator: '.'
+  // }
+  unformatMoney: function(value, options) {
+    var opts, unformatted, is_negative;
     value = value || 0;
+    options = options || {};
 
     // just return value if it's already a number
     if (typeof value === 'number') {
@@ -55,9 +60,31 @@ var numberFormat = {
 
     // Still here? Let's make sure we're dealing with a string.
     value = ('' + value).trim();
+    // establish defaults
+    opts = {
+      currency_symbol: options.currency_symbol || '$',
+      thousands_separator: options.thousands_separator || ',',
+      decimal_separator: options.decimal_separator || '.'
+    };
     // NOTE: Those two minuses may look the same in your editor, but they are
     // two different characters -- minus and hyphen-minus.
     is_negative = (value[0] === '-' || value[0] === '−');
+
+    // NOTE: We only care about currency_symbol and thousands_separator if they
+    // could be confused with a decimal point by parseFloat. Only bother with
+    // decimal_separator if it's not ".".
+    if (opts.thousands_separator.indexOf('.') !== -1) {
+      opts.thousands_separator = opts.thousands_separator.replace(/\./g, '\\.');
+      value = value.replace((new RegExp(opts.thousands_separator, 'g')), '');
+    }
+    // Since currency_symbol and decimal_separator should only appear once, only
+    // their first occurrence is removed/replaced -- no need for regex.
+    if (opts.currency_symbol.indexOf('.') !== -1) {
+      value = value.replace(opts.currency_symbol, '');
+    }
+    if (opts.decimal_separator !== '.') {
+      value = value.replace(opts.decimal_separator, '.');
+    }
     unformatted = parseFloat(value.replace(/[^0-9.]/g, '')) * (is_negative ? -1 : 1);
 
     return isNaN(unformatted) ? 0 : unformatted;
