@@ -107,9 +107,9 @@ var numberFormat = {
   },
 
   // padZeros
-  // take a number, return a string that's front-padded with zeroes to the specified length
-  padZeros: function(num, length) {
-    var padded_str = '' + num;
+  // take a number, return a string that's front-padded with zeros to the specified length
+  padZeros: function(number, length) {
+    var padded_str = '' + number;
 
     while (padded_str.length < length) {
       padded_str = '0' + padded_str;

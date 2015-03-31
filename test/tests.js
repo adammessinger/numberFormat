@@ -134,5 +134,26 @@
         })).to.equal(1000000.99);
       });
     });
+
+    describe('padZeros', function() {
+      it('should return a string representation of passed number if length arg is <= length of said string', function() {
+        expect(numberFormat.padZeros(5)).to.equal('5');
+        expect(numberFormat.padZeros(5,0)).to.equal('5');
+        expect(numberFormat.padZeros(5,1)).to.equal('5');
+      });
+
+      it('should return a string representation of passed number, front-padded with zeros to passed length', function() {
+        expect(numberFormat.padZeros(5,1).length).to.equal(1);
+        expect(numberFormat.padZeros(5,2).length).to.equal(2);
+        expect(numberFormat.padZeros(5,3).length).to.equal(3);
+        expect(numberFormat.padZeros(5,4).length).to.equal(4);
+        expect(numberFormat.padZeros(5,5).length).to.equal(5);
+        expect(numberFormat.padZeros(5,6).length).to.equal(6);
+        expect(numberFormat.padZeros(5,7).length).to.equal(7);
+        expect(numberFormat.padZeros(5,8).length).to.equal(8);
+        expect(numberFormat.padZeros(5,9).length).to.equal(9);
+        expect(numberFormat.padZeros(5,10).length).to.equal(10);
+      });
+    });
   });
 })(chai.expect);
