@@ -30,7 +30,7 @@ var numberFormat = {
     var i = parseInt(number = Math.abs(+number || 0).toFixed(decimal_places), 10) + '';
     var j = i.length > 3 ? i.length % 3 : 0;
 
-    return currency_symbol + negative
+    return negative + currency_symbol
       + (j ? i.substr(0, j) + thousands_separator : '')
       + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thousands_separator)
       + (decimal_places
