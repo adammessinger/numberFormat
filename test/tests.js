@@ -76,30 +76,22 @@
 
       it('should remove non-numeric characters except decimal and leading minus', function() {
         var unformat = numberFormat.unformatMoney;
-        var just_non_numbers = unformat('1!2@3#4$5%6a7`89₴01');
-        var nonnum_and_decimal = unformat('1!2@3#4$5%6a7`.89₴01');
-        var nonnum_and_leading_minus = unformat('-1!2@3#4$5%6a7`89₴01');
-        var nonnum_and_decimal_and_leading_minus = unformat('-1!2@3#4$5%6a7`.89₴01');
-        var nonnum_and_internal_minus = unformat('1!2@3#4$5%6a7`8-9₴01');
-        var nonnum_and_decimal_and_internal_minus = unformat('1!2@3#4$5%6a7`.8-9₴01');
-        var nonnum_and_leading_and_internal_minus = unformat('-1!2@3#4$5%6a7`8-9₴01');
-        var nonnum_and_decimal_and_leading_and_internal_minus = unformat('-1!2@3#4$5%6a7`.8-9₴01');
 
-        expect(just_non_numbers, 'string includes non-numbers')
+        expect(unformat('1!2@3#4$5%6a7`89₴01'), 'string includes non-numbers')
           .to.equal(12345678901);
-        expect(nonnum_and_decimal, 'non-numbers and a decimal')
+        expect(unformat('1!2@3#4$5%6a7`.89₴01'), 'non-numbers and a decimal')
           .to.equal(1234567.8901);
-        expect(nonnum_and_leading_minus, 'non-numbers and a leading minus')
+        expect(unformat('-1!2@3#4$5%6a7`89₴01'), 'non-numbers and a leading minus')
           .to.equal(-12345678901);
-        expect(nonnum_and_decimal_and_leading_minus, 'non-numbers, decimal, and leading minus')
+        expect(unformat('-1!2@3#4$5%6a7`.89₴01'), 'non-numbers, decimal, and leading minus')
           .to.equal(-1234567.8901);
-        expect(nonnum_and_internal_minus, 'non-numbers plus internal minus')
+        expect(unformat('1!2@3#4$5%6a7`8-9₴01'), 'non-numbers plus internal minus')
           .to.equal(12345678901);
-        expect(nonnum_and_decimal_and_internal_minus, 'non-numbers, decimal, and internal minus')
+        expect(unformat('1!2@3#4$5%6a7`.8-9₴01'), 'non-numbers, decimal, and internal minus')
           .to.equal(1234567.8901);
-        expect(nonnum_and_leading_and_internal_minus, 'non-numbers, leading minus, and internal minus')
+        expect(unformat('-1!2@3#4$5%6a7`8-9₴01'), 'non-numbers, leading minus, and internal minus')
           .to.equal(-12345678901);
-        expect(nonnum_and_decimal_and_leading_and_internal_minus, 'non-numbers, decimal, leading minus, and internal minus')
+        expect(unformat('-1!2@3#4$5%6a7`.8-9₴01'), 'non-numbers, decimal, leading minus, and internal minus')
           .to.equal(-1234567.8901);
       });
     });
