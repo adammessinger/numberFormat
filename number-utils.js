@@ -3,6 +3,19 @@
 /**
  * A small handful of number formatting utilities I've been using in my work
  */
+
+// String.prototype.trim polyfill for numberFormat.unformatMoney
+if (!String.prototype.trim) {
+  (function() {
+    // Make sure we trim BOM and NBSP
+    var rgx_trim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+
+    String.prototype.trim = function() {
+      return this.replace(rgx_trim, '');
+    };
+  })();
+}
+
 var numberFormat = {
   // currency formatter taken from http://www.josscrowcroft.com/2011/code/format-unformat-money-currency-javascript/
   // default args: 0, 2, "$", ",", "."
@@ -25,11 +38,13 @@ var numberFormat = {
         : "");
   },
 
-  // Remove non-numeric chars from a string (except decimal point & minus sign)
-  // and return a numeric value. Any falsey argument returns zero. Anything that
-  // makes parseFloat return NaN after the character replacement also returns 0.
+  // Remove non-numeric chars from a string (except decimal point & leading minus)
+  // and return a numeric value. Only a leading minus sign (or hyphen-minus
+  // character) is interpreted as indicating the number is negative. Any falsey
+  // argument returns zero. Anything that makes parseFloat return NaN after the
+  // character replacement also returns 0.
   unformatMoney: function(value) {
-    var unformatted;
+    var unformatted, is_negative;
 
     value = value || 0;
 
@@ -38,7 +53,13 @@ var numberFormat = {
       return value;
     }
 
-    unformatted = parseFloat(value.replace(/[^0-9-.]/g, ''));
+    // Still here? Let's make sure we're dealing with a string.
+    value = ('' + value).trim();
+    // NOTE: Those two minuses may look the same in your editor, but they are
+    // two different characters -- minus and hyphen-minus.
+    is_negative = (value[0] === '-' || value[0] === '−');
+    unformatted = parseFloat(value.replace(/[^0-9.]/g, '')) * (is_negative ? -1 : 1);
+
     return isNaN(unformatted) ? 0 : unformatted;
   },
 

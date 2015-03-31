@@ -55,12 +55,6 @@
         expect(numberFormat.unformatMoney('1')).to.be.a('number');
       });
 
-      it('should only use leading "-" to determine negativity', function() {
-        expect(numberFormat.unformatMoney('-1'), 'leading "-"').to.equal(-1);
-        expect(numberFormat.unformatMoney('1-'), 'trailing "-"').to.equal(1);
-        expect(numberFormat.unformatMoney('10-1'), 'inner "-"').to.equal(100);
-      });
-
       it('should return the numeric representation of a string', function() {
         expect(numberFormat.unformatMoney('1')).to.equal(1);
         expect(numberFormat.unformatMoney('100 goats')).to.equal(100);
@@ -70,25 +64,26 @@
         expect(numberFormat.unformatMoney('-$2,000.15: OVERDRAWN')).to.equal(-2000.15);
       });
 
-      it('should remove any passed currency_symbol option before processing', function() {
-        expect(numberFormat.unformatMoney("Fr. 1'000'000.00", {
-          currency_symbol: 'Fr. '
-        })).to.equal(1000000);
+      it('should only use leading minus or hyphen-minus to determine negativity', function() {
+        expect(numberFormat.unformatMoney('−1'), 'leading minus')
+          .to.equal(-1);
+        expect(numberFormat.unformatMoney('  −1'), 'leading minus + spaces')
+          .to.equal(-1);
+        expect(numberFormat.unformatMoney('1−'), 'trailing minus')
+          .to.equal(1);
+        expect(numberFormat.unformatMoney('10−1'), 'inner minus')
+          .to.equal(101);
+        expect(numberFormat.unformatMoney('-1'), 'leading hyphen-minus')
+          .to.equal(-1);
+        expect(numberFormat.unformatMoney('  -1'), 'leading hyphen-minus + spaces')
+          .to.equal(-1);
+        expect(numberFormat.unformatMoney('1-'), 'trailing hyphen-minus')
+          .to.equal(1);
+        expect(numberFormat.unformatMoney('10-1'), 'inner hyphen-minus')
+          .to.equal(101);
       });
 
-      it('should respect alternate thousands_separator option when passed', function() {
-        expect(numberFormat.unformatMoney('₡1.000.000', {
-          thousands_separator: '.'
-        })).to.equal(1000000);
-      });
-
-      it('should respect alternate decimal_separator arg when passed', function() {
-        expect(numberFormat.unformatMoney('₴1 000 000,99', {
-          decimal_separator: ','
-        })).to.equal(1000000.99);
-      });
-
-      it('should remove non-numeric characters except decimal and leading minus', function() {
+      it('should remove non-numeric characters except decimal, while respecting leading minus as negative indicator', function() {
         var unformat = numberFormat.unformatMoney;
 
         expect(unformat('1!2@3#4$5%6a7`89₴01'), 'string includes non-numbers')
@@ -107,6 +102,24 @@
           .to.equal(-12345678901);
         expect(unformat('-1!2@3#4$5%6a7`.8-9₴01'), 'non-numbers, decimal, leading minus, and internal minus')
           .to.equal(-1234567.8901);
+      });
+
+      it('should remove any passed currency_symbol option before processing', function() {
+        expect(numberFormat.unformatMoney("Fr. 1'000'000.00", {
+          currency_symbol: 'Fr. '
+        })).to.equal(1000000);
+      });
+
+      it('should respect alternate thousands_separator option when passed', function() {
+        expect(numberFormat.unformatMoney('₡1.000.000', {
+          thousands_separator: '.'
+        })).to.equal(1000000);
+      });
+
+      it('should respect alternate decimal_separator option when passed', function() {
+        expect(numberFormat.unformatMoney('₴1 000 000,99', {
+          decimal_separator: ','
+        })).to.equal(1000000.99);
       });
     });
   });
