@@ -40,9 +40,9 @@
       });
 
       it('should proccess alternate currency formats', function() {
-        var costa_rico = numberFormat.formatMoney(1000000, 2, '₡', '.', ',');
-        var ukraine = numberFormat.formatMoney(1000000, 2, '₴', ' ', ',');
-        var switzerland = numberFormat.formatMoney(1000000, 2, 'Fr. ', "'", '.');
+        var costa_rico = numberFormat.formatMoney(1000000, undefined, '₡', '.', ',');
+        var ukraine = numberFormat.formatMoney(1000000, undefined, '₴', ' ', ',');
+        var switzerland = numberFormat.formatMoney(1000000, undefined, 'Fr. ', "'", '.');
 
         expect(costa_rico).to.equal('₡1.000.000,00');
         expect(ukraine).to.equal('₴1 000 000,00');
