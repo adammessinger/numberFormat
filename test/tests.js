@@ -1,9 +1,9 @@
 (function(expect) {
   'use strict';
 
-  describe('numberUtils', function() {
+  describe('numberFormat', function() {
     describe('formatMoney', function() {
-      var testee = numberUtils.formatMoney;
+      var testee = numberFormat.formatMoney;
 
       it('should return a string', function() {
         expect(testee(1)).to.be.a('string');
@@ -53,7 +53,7 @@
     });
 
     describe('unformatMoney', function() {
-      var testee = numberUtils.unformatMoney;
+      var testee = numberFormat.unformatMoney;
 
       it('should return a number', function() {
         expect(testee('1')).to.be.a('number');

@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * A small handful of number utilities I've been using in my work
+ * A small handful of number formatting utilities I've been using in my work
  */
-var numberUtils = {
+var numberFormat = {
   // currency formatter taken from http://www.josscrowcroft.com/2011/code/format-unformat-money-currency-javascript/
   // default args: 0, 2, "$", ",", "."
   // TODO: permit reformatting currency strings by running thru unformatMoney 1st?
